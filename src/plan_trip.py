@@ -59,8 +59,19 @@ class TripPlanner:
         return trip
 
     def check_directions(self, direction_1, direction_2):
-        one_direction = {"Downtown Largo", "New Carrolton", "Mount Vernon Square"}
-        other_direction = {"Franconia-Springfield", "Ashburn", "Vienna", "Hungington"}
+        one_direction = {
+            "Downtown Largo",
+            "New Carrolton",
+            "Mount Vernon Square",
+            "Greenbelt",
+        }
+        other_direction = {
+            "Franconia-Springfield",
+            "Ashburn",
+            "Vienna",
+            "Hungington",
+            "Branch Avenue",
+        }
         if direction_1 in one_direction and direction_2 in other_direction:
             return True
         if direction_1 in one_direction and direction_2 in one_direction:
