@@ -69,12 +69,12 @@ class TripPlanner:
             "Franconia-Springfield",
             "Ashburn",
             "Vienna",
-            "Hungington",
+            "Huntington",
             "Branch Avenue",
         }
-        if direction_1 in one_direction and direction_2 in other_direction:
-            return True
         if direction_1 in one_direction and direction_2 in one_direction:
+            return True
+        if direction_1 in other_direction and direction_2 in other_direction:
             return True
         return False
 
