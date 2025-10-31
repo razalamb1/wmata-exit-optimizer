@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WMATA Exit Optimizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="container">
+        <h1>WMATA Exit Optimizer</h1>
+        <p>Find the optimal train car and door for your destination</p>
+
+        <form method="POST">
+            <label for="start_station">Start Station</label>
+            <select id="start_station" name="start_station" required>
+                <option value="">Select a station</option>
+                {% for station in stations %}
+                <option value="{{ station }}" {% if trip_info and trip_info["start_station"]==station %}selected{% endif
+                    %}>
+                    {{ station }}
+                </option> {% endfor %}
+            </select>
+
+            <label for="end_station">End Station</label>
+            <select id="end_station" name="end_station" required>
+                <option value="">Select a station</option>
+                {% for station in stations %}
+                <option value="{{ station }}" {% if trip_info and trip_info["end_station"]==station %}selected{% endif
+                    %}>
+                    {{ station }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Find Optimal Boarding</button>
+        </form>
+
+        {% if trip_info %}
+        <div class="result">
+            {% if trip_info.transfer %}
+            {% if trip_info["first_leg"].egresses %}
+            <p>
+                Your trip will require a transfer. First, you will travel on the <strong>{{
+                    trip_info["first_leg"]["lines"]
+                    }}</strong> line(s) towards <strong>{{
+                    trip_info["first_leg"]["direction"] }}</strong> for
+                <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
+                <br>
+                <br>Board the train at <strong>{{ trip_info["first_leg"]["start_station"] }}</strong> at the point(s)
+                listed below
+                for
+                optimized transfer at <strong>{{ trip_info["first_leg"]["end_station"] }}</strong>.
+            </p>
+            {% else %}
+            <p>
+                Your trip will require a transfer. First, you will travel on the <strong>{{
+                    trip_info["first_leg"]["lines"]
+                    }}</strong> line(s) towards <strong>{{
+                    trip_info["first_leg"]["direction"] }}</strong> for
+                <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
+                <br>
+                <br>Your transfer will be on the same platform, so you can board the train at <strong>{{
+                    trip_info["first_leg"]["start_station"] }}</strong> at the point(s)
+                listed below and then re-board the same location when you transfer at <strong>{{
+                    trip_info["first_leg"]["end_station"] }}</strong>.
+            </p>
+            {% endif %}
+            {% else %}
+            <p>
+                You will take a journey on the <strong>{{ trip_info["first_leg"]["lines"] }}</strong> line(s) towards
+                <strong>{{
+                    trip_info["first_leg"]["direction"] }}</strong> for
+                <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
+                <br>
+                <br>Board the train at <strong>{{ trip_info["first_leg"]["start_station"] }}</strong> at the points
+                listed below for
+                optimized
+                exit at <strong>{{ trip_info["first_leg"]["end_station"] }}</strong>.
+            </p>
+            {% endif %}
+
+            {% for name, entries in trip_info["first_leg"].egresses.items() %}
+            <div class="egress-group">
+                <h3>{{ name }}</h3>
+                <ul class="egress-list">
+                    {% for entry in entries %}
+                    <li>
+                        {% if entry[0] == "el" %}
+                        <i class="fas fa-elevator" title="Elevator"></i>
+                        {% elif entry[0] == "esc" %}
+                        <img src="{{ url_for('static', filename='icons/esc.svg') }}" alt="Escalator" class="icon">
+                        {% elif entry[0] == "stair" %}
+                        <i class="fas fa-stairs" title="Stairs"></i>
+                        {% elif entry[0] == "exit" %}
+                        <i class="fas fa-door-open" title="Exit"></i>
+                        {% else %}
+                        <i class="fas fa-question-circle" title="Unknown"></i>
+                        {% endif %}
+                        <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+
+            {% if trip_info.transfer %}
+        </div>
+
+        <div class="result">
+            <p>
+                For the second leg of your trip, you will travel on the <strong>{{ trip_info["second_leg"]["lines"]
+                    }}</strong> line(s) towards <strong>{{
+                    trip_info["second_leg"]["direction"] }}</strong> for
+                <strong>{{ trip_info["second_leg"]["num_stops"] }}</strong> stops.
+                <br>
+                <br>Board the train at <strong>{{ trip_info["second_leg"]["start_station"] }}</strong> at the point(s)
+                listed below
+                for
+                optimized exit at <strong>{{ trip_info["second_leg"]["end_station"] }}</strong>.
+            </p>
+
+            {% for name, entries in trip_info["second_leg"].egresses.items() %}
+            <div class="egress-group">
+                <h3>{{ name }}</h3>
+                <ul class="egress-list">
+                    {% for entry in entries %}
+                    <li>
+                        {% if entry[0] == "el" %}
+                        <i class="fas fa-elevator" title="Elevator"></i>
+                        {% elif entry[0] == "esc" %}
+                        <img src="{{ url_for('static', filename='icons/esc.svg') }}" alt="Escalator" class="icon">
+                        {% elif entry[0] == "stair" %}
+                        <i class="fas fa-stairs" title="Stairs"></i>
+                        {% elif entry[0] == "exit" %}
+                        <i class="fas fa-door-open" title="Exit"></i>
+                        {% else %}
+                        <i class="fas fa-question-circle" title="Unknown"></i>
+                        {% endif %}
+                        <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
