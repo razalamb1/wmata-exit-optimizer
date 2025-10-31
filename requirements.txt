@@ -1,46 +1,11 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: osx-64
-blinker==1.9.0
-bzip2==1.0.8
-ca-certificates==2025.10.5
 click==8.3.0
 flask==3.1.2
 gunicorn==23.0.0
-importlib-metadata==8.7.0
-itsdangerous==2.2.0
 jinja2==3.1.6
-libblas==3.9.0
-libcblas==3.9.0
-libcxx==21.1.3
-libexpat==2.7.1
-libffi==3.4.6
-libgfortran==15.2.0
-libgfortran5==15.2.0
-liblapack==3.9.0
-liblzma==5.8.1
-libmpdec==4.0.0
-libopenblas==0.3.30
-libsqlite==3.50.4
-libzlib==1.3.1
-llvm-openmp==21.1.3
-markupsafe==3.0.3
-ncurses==6.5
 numpy==2.3.3
-openssl==3.5.4
-packaging==25.0
 pandas==2.3.3
 pip==25.2
 python==3.14.0
-python-dateutil==2.9.0.post0
-python-tzdata==2025.2
-python_abi==3.14
-pytz==2025.2
-readline==8.2
-setuptools==80.9.0
-six==1.17.0
-tk==8.6.13
-tzdata==2025b
-werkzeug==3.1.3
-zipp==3.23.0
-zstd==1.5.7
