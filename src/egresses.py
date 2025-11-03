@@ -30,6 +30,7 @@ class Egress:
         dir,
         label,
         lines,
+        preferred,
         transfer,
         transfer_lines,
         transfer_direction,
@@ -41,6 +42,7 @@ class Egress:
         self.dir = dir
         self.label = label
         self.lines = lines
+        self.preferred = preferred
         self.get_transfer_information(transfer, transfer_lines, transfer_direction)
 
     def get_transfer_information(self, transfer, transfer_lines, transfer_direction):
@@ -94,6 +96,7 @@ class Egress:
         if line not in self.lines:
             return None
         exit_info = dict()
+        exit_info["preferred"] = self.preferred
         exit_info["label"] = self.label
         exit_info["icon"] = self.icon
         if direction == "eastbound":
@@ -128,6 +131,9 @@ def get_one_egress(row):
     else:
         label = "Main Exit"
     lines = get_lines_at_station(station)
+    preferred = False
+    if row["pref"] == True:
+        preferred = True
     transfer = row["transfer"]
     transfer_lines = row["lines"]
     transfer_direction = row["direction"]
@@ -142,6 +148,7 @@ def get_one_egress(row):
         dir,
         label,
         lines,
+        preferred,
         transfer,
         transfer_lines,
         transfer_direction,

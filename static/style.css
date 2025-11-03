@@ -97,3 +97,18 @@ button:hover {
     height: 20px;
     vertical-align: middle;
 }
+
+.egress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preferred-tag {
+    background-color: #ffcc00;
+    color: #222;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.85em;
+}

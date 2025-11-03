@@ -34,8 +34,11 @@ class Line:
             names.add(egress["label"])
         for egress in egress_list:
             reorganized_e[egress["label"]].append(
-                [egress["icon"], egress["car"], egress["door"]]
+                [egress["icon"], egress["car"], egress["door"], egress["preferred"]]
             )
+        for label, egress_list in reorganized_e.items():
+            sorted_e_list = sorted(egress_list, key=lambda x: (x[1], x[2]))
+            reorganized_e[label] = sorted_e_list
         return reorganized_e
 
     def get_transfer_stations_for_line(self, line):
