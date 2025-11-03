@@ -102,6 +102,9 @@
                         <i class="fas fa-question-circle" title="Unknown"></i>
                         {% endif %}
                         <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                        {% if entry[3] %}
+                        <span class="preferred-tag">Preferred</span>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
@@ -142,6 +145,9 @@
                         <i class="fas fa-question-circle" title="Unknown"></i>
                         {% endif %}
                         <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                        {% if entry[3] %}
+                        <span class="preferred-tag">Preferred</span>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
