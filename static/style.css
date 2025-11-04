@@ -112,3 +112,11 @@ button:hover {
     border-radius: 8px;
     font-size: 0.85em;
 }
+
+.note {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 15px;
+    text-align: left;
+    font-style: italic;
+}
