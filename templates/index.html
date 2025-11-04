@@ -41,6 +41,7 @@
         </form>
 
         {% if trip_info %}
+        {% set show_asterisk_note = namespace(value=false) %}
         <div class="result">
             {% if trip_info.transfer %}
             {% if trip_info["first_leg"].egresses %}
@@ -101,7 +102,12 @@
                         {% else %}
                         <i class="fas fa-question-circle" title="Unknown"></i>
                         {% endif %}
-                        <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                        <span>
+                            Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong>
+                            {% if entry[1] > 6 %}
+                            *{% set show_asterisk_note.value = true %}
+                            {% endif %}
+                        </span>
                         {% if entry[3] %}
                         <span class="preferred-tag">Preferred</span>
                         {% endif %}
@@ -144,7 +150,12 @@
                         {% else %}
                         <i class="fas fa-question-circle" title="Unknown"></i>
                         {% endif %}
-                        <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                        <span>
+                            Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong>
+                            {% if entry[1] > 6 %}
+                            *{% set show_asterisk_note.value = true %}
+                            {% endif %}
+                        </span>
                         {% if entry[3] %}
                         <span class="preferred-tag">Preferred</span>
                         {% endif %}
@@ -156,6 +167,12 @@
             {% endif %}
 
         </div>
+        {% endif %}
+        {% if show_asterisk_note.value %}
+        <p class="note">
+            *Some Metro trains may only run 6 cars (instead of the full platform length of 8).
+            In this case, board at <strong>Car 6, Door 3</strong>.
+        </p>
         {% endif %}
     </div>
 
