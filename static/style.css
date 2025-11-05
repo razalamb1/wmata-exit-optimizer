@@ -120,3 +120,8 @@ button:hover {
     text-align: left;
     font-style: italic;
 }
+
+.select2-container {
+    text-align: left;
+    font-size: 16px;
+}

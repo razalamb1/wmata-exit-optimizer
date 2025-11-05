@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 </head>
 
 <body>
@@ -17,7 +26,7 @@
 
         <form method="POST">
             <label for="start_station">Start Station</label>
-            <select id="start_station" name="start_station" required>
+            <select id="start_station" name="start_station" class="select-station" required>
                 <option value="">Select a station</option>
                 {% for station in stations %}
                 <option value="{{ station }}" {% if trip_info and trip_info["start_station"]==station %}selected{% endif
@@ -27,7 +36,7 @@
             </select>
 
             <label for="end_station">End Station</label>
-            <select id="end_station" name="end_station" required>
+            <select id="end_station" name="end_station" class="select-station" required>
                 <option value="">Select a station</option>
                 {% for station in stations %}
                 <option value="{{ station }}" {% if trip_info and trip_info["end_station"]==station %}selected{% endif
@@ -167,14 +176,25 @@
             {% endif %}
 
         </div>
-        {% endif %}
         {% if show_asterisk_note.value %}
         <p class="note">
             *Some Metro trains may only run 6 cars (instead of the full platform length of 8).
             In this case, board at <strong>Car 6, Door 3</strong>.
         </p>
         {% endif %}
+
+        {% endif %}
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.select-station').select2({
+                width: '100%',
+                placeholder: "Select a station",
+                allowClear: true
+            });
+        });
+    </script>
 
 </body>
 
