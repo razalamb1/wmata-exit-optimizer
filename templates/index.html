@@ -8,36 +8,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 
 <body>
     <div class="container">
         <h1>WMATA Exit Optimizer</h1>
-        <p>Find the optimal train car and door for your destination</p>
+        <p>Enter your start and end station to find the optimal boarding position(s) for your
+            journey.</p>
 
-        <form method="POST">
-            <label for="start_station">Start Station</label>
-            <select id="start_station" name="start_station" required>
-                <option value="">Select a station</option>
-                {% for station in stations %}
-                <option value="{{ station }}" {% if trip_info and trip_info["start_station"]==station %}selected{% endif
-                    %}>
-                    {{ station }}
-                </option> {% endfor %}
-            </select>
+        <form method="POST" class="station-form">
+            <div class="station-group">
+                <label for="start_station" class="start-text">START STATION</label>
+                <select id="start_station" name="start_station" class="select-station" required>
+                    <option value="">Select a station</option>
+                    {% for station in stations %}
+                    <option value="{{ station }}" {% if trip_info and trip_info["start_station"]==station %}selected{%
+                        endif %}>
+                        {{ station }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label for="end_station">End Station</label>
-            <select id="end_station" name="end_station" required>
-                <option value="">Select a station</option>
-                {% for station in stations %}
-                <option value="{{ station }}" {% if trip_info and trip_info["end_station"]==station %}selected{% endif
-                    %}>
-                    {{ station }}
-                </option>
-                {% endfor %}
-            </select>
+            <div class="swap-container">
+                <button type="button" id="swap-btn" title="Swap start and end stations">
+                    <i class="fas fa-right-left"></i>
+                </button>
+            </div>
 
-            <button type="submit">Find Optimal Boarding</button>
+            <div class="station-group">
+                <label for="start_station" class="start-text">END STATION</label>
+                <select id="end_station" name="end_station" class="select-station" required>
+                    <option value="">Select a station</option>
+                    {% for station in stations %}
+                    <option value="{{ station }}" {% if trip_info and trip_info["end_station"]==station %}selected{%
+                        endif %}>
+                        {{ station }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Find Optimal Boarding</button>
         </form>
 
         {% if trip_info %}
@@ -167,14 +183,38 @@
             {% endif %}
 
         </div>
-        {% endif %}
         {% if show_asterisk_note.value %}
         <p class="note">
             *Some Metro trains may only run 6 cars (instead of the full platform length of 8).
-            In this case, board at <strong>Car 6, Door 3</strong>.
+            If this is case, board at <strong>Car 6, Door 3</strong>.
         </p>
         {% endif %}
+
+        {% endif %}
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.select-station').select2({
+                width: '100%',
+                placeholder: "Select a station",
+                allowClear: true
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById('swap-btn').addEventListener('click', function () {
+            const start = document.getElementById('start_station');
+            const end = document.getElementById('end_station');
+            const temp = start.value;
+            start.value = end.value;
+            end.value = temp;
+            // Trigger change event if using Select2 or similar
+            start.dispatchEvent(new Event('change'));
+            end.dispatchEvent(new Event('change'));
+        });
+    </script>
 
 </body>
 
