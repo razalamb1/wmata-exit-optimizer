@@ -15,6 +15,30 @@ body {
     text-align: center;
 }
 
+.YL {
+    color: gold;
+}
+
+.GR {
+    color: green;
+}
+
+.RD {
+    color: red;
+}
+
+.BL {
+    color: blue;
+}
+
+.SV {
+    color: silver;
+}
+
+.OR {
+    color: orange;
+}
+
 h1 {
     color: #1c1e21;
 }

@@ -1,16 +1,20 @@
 """The WMATA Lines as objects."""
 
 from collections import defaultdict
+from src.stations import Station
 
 
 class Line:
-    def __init__(self, stations, name):
+    """One WMATA line."""
+
+    def __init__(self, stations: list[Station], name: str):
         self.name = name
         self.stations = stations
         self.transfer_stations = self.get_transfer_stations(stations)
         self.station_names = [s.name for s in stations]
 
-    def get_transfer_stations(self, stations):
+    def get_transfer_stations(self, stations: list[Station]) -> dict[list[Station]]:
+        """Identify transfer stations along the line."""
         transfers = defaultdict(list)
         for i in range(1, len(stations) - 1):
             potential_transfer = stations[i]
@@ -21,13 +25,15 @@ class Line:
                     transfers[line].append(potential_transfer)
         return transfers
 
-    def contains_station(self, station):
+    def contains_station(self, station: str) -> bool:
+        """Returns whether a station is in this line."""
         for s in self.stations:
             if s.name == station:
                 return True
         return False
 
-    def reorganize_egresses(self, egress_list):
+    def reorganize_egresses(self, egress_list: list[dict]) -> dict[list]:
+        """Reorganizes egresses."""
         names = set()
         reorganized_e = defaultdict(list)
         for egress in egress_list:
@@ -41,17 +47,19 @@ class Line:
             reorganized_e[label] = sorted_e_list
         return reorganized_e
 
-    def get_transfer_stations_for_line(self, line):
+    def get_transfer_stations_for_line(self, line: str) -> list[Station]:
+        """Return transfer stations on the line given another line."""
         return self.transfer_stations[line]
 
     def plan_trip(
         self,
-        start_station,
-        end_station,
-        transfer=False,
-        transfer_line=None,
-        transfer_direction=None,
-    ):
+        start_station: Station,
+        end_station: Station,
+        transfer: bool = False,
+        transfer_line: str = None,
+        transfer_direction: str = None,
+    ) -> dict:
+        """Plan a trip along this line."""
         trip = dict()
         direction, num_stops = self.get_direction_and_number(start_station, end_station)
         egresses = end_station.egresses
@@ -66,25 +74,27 @@ class Line:
                     egress_locations.append(egress_info)
         egress_locations = self.reorganize_egresses(egress_locations)
         if direction == "eastbound":
-            trip["direction"] = self.eastern_end
+            direction = self.eastern_end
         else:
-            trip["direction"] = self.western_end
+            direction = self.western_end
         trip["num_stops"] = num_stops
         trip["egresses"] = egress_locations
         trip["start_station"] = start_station.name
         trip["end_station"] = end_station.name
-        trip["lines"] = self.name
+        trip["lines"] = {self.name: direction}
         return trip
 
     @property
-    def eastern_end(self):
+    def eastern_end(self) -> str:
         return self.station_names[-1]
 
     @property
-    def western_end(self):
+    def western_end(self) -> str:
         return self.station_names[0]
 
-    def get_direction_and_number(self, start_station, end_station):
+    def get_direction_and_number(
+        self, start_station: Station, end_station: Station
+    ) -> tuple:
         start_index = self.station_names.index(start_station.name)
         end_index = self.station_names.index(end_station.name)
         num_stations = abs(start_index - end_index)
@@ -94,7 +104,7 @@ class Line:
             return "westbound", num_stations
 
 
-def define_all_lines(stations):
+def define_all_lines(stations: dict) -> dict[str:Line]:
     red_stations = [
         "Shady Grove",
         "Rockville",
