@@ -50,7 +50,7 @@ class TripPlanner:
                 t_plan["transfer_station"],
                 transfer=True,
                 transfer_line=t_plan["end_line"],
-                transfer_direction=second_leg["direction"],
+                transfer_direction=list(second_leg["lines"].values())[0],
             )
             possible_trips[second_leg["num_stops"] + first_leg["num_stops"]].append(
                 (first_leg, second_leg)
@@ -106,22 +106,15 @@ class TripPlanner:
 
     def combine_trips(self, trips: list[dict]) -> list[dict]:
         """Deal with many potential trips."""
-        first_lines = set()
-        first_direction = set()
-        second_lines = set()
-        second_direction = set()
+        first_lines = dict()
+        second_lines = dict()
         for trip in trips:
-            first_lines.add(trip[0]["lines"])
-            first_direction.add(trip[0]["direction"])
-            second_lines.add(trip[1]["lines"])
-            second_direction.add(trip[1]["direction"])
-
+            first_lines.update(trip[0]["lines"])
+            second_lines.update(trip[1]["lines"])
         first_leg = trips[0][0]
         second_leg = trips[0][1]
-        first_leg["lines"] = "/".join(first_lines)
-        first_leg["direction"] = "/".join(first_direction)
-        second_leg["lines"] = "/".join(second_lines)
-        second_leg["direction"] = "/".join(second_direction)
+        first_leg["lines"] = first_lines
+        second_leg["lines"] = second_lines
         return [first_leg, second_leg]
 
     def plan_single_line_trip(self, union_lines: set[str]) -> dict:
@@ -137,15 +130,15 @@ class TripPlanner:
         if union_lines == {"RD", "GR"}:
             return trips["RD"]
         if len(len_dict) == 1:
-            trip = list(trips.values())[0]
-            line_names = "/".join(list(len_dict.values())[0])
-            trip["lines"] = line_names
-            direction = "/".join({t["direction"] for t in trips.values()})
-            trip["direction"] = direction
-            return trip
+            main_trip = list(trips.values())[0]
+            trip_line_dict = main_trip["lines"]
+            for trip in list(trips.values()):
+                trip_line_dict.update(trip["lines"])
+            return main_trip
         else:
             smallest_dist = min(len_dict)
-            line_names = "/".join(len_dict[smallest_dist])
-            trip = trips[len_dict[smallest_dist][0]]
-            trip["lines"] = line_names
-            return trip
+            main_trip = trips[len_dict[smallest_dist][0]]
+            trip_line_dict = main_trip["lines"]
+            for trip in trips[len_dict[smallest_dist]]:
+                trip_line_dict.update(trip["lines"])
+            return main_trip

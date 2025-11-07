@@ -74,14 +74,14 @@ class Line:
                     egress_locations.append(egress_info)
         egress_locations = self.reorganize_egresses(egress_locations)
         if direction == "eastbound":
-            trip["direction"] = self.eastern_end
+            direction = self.eastern_end
         else:
-            trip["direction"] = self.western_end
+            direction = self.western_end
         trip["num_stops"] = num_stops
         trip["egresses"] = egress_locations
         trip["start_station"] = start_station.name
         trip["end_station"] = end_station.name
-        trip["lines"] = self.name
+        trip["lines"] = {self.name: direction}
         return trip
 
     @property

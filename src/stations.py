@@ -8,7 +8,7 @@ class Station:
         self.name = egresses[0].station
 
 
-def load_all_stations(egresse: list[Egress]) -> dict[str:Station]:
+def load_all_stations(egresses: list[Egress]) -> dict[str:Station]:
     """Load all the stations given all egresses."""
     stations = dict()
     unique_station_names = set()
