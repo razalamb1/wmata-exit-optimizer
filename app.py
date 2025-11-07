@@ -18,7 +18,6 @@ def index():
         # Add station to return object
         result["start_station"] = start
         result["end_station"] = end
-        print(result)
     return render_template(
         "index.html", stations=sorted(stations.keys()), trip_info=result
     )
