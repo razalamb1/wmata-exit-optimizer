@@ -67,7 +67,8 @@ class TripPlanner:
                 trip[0]["egresses"] = new_egresses
         return trip
 
-    def check_directions(self, direction_1, direction_2):
+    def check_directions(self, direction_1: str, direction_2: str) -> bool:
+        """Check the directions of two lines."""
         one_direction = {
             "Downtown Largo",
             "New Carrolton",
@@ -87,7 +88,8 @@ class TripPlanner:
             return True
         return False
 
-    def get_transfer_plans(self, start_lines, end_lines):
+    def get_transfer_plans(self, start_lines: str, end_lines: str) -> list[dict]:
+        """Get transfer plans."""
         transfer_plans = []
         for s_line in start_lines:
             for e_line in end_lines:
@@ -102,7 +104,8 @@ class TripPlanner:
                     transfer_plans.append(transfer_plan)
         return transfer_plans
 
-    def combine_trips(self, trips):
+    def combine_trips(self, trips: list[dict]) -> list[dict]:
+        """Deal with many potential trips."""
         first_lines = set()
         first_direction = set()
         second_lines = set()
@@ -121,7 +124,8 @@ class TripPlanner:
         second_leg["direction"] = "/".join(second_direction)
         return [first_leg, second_leg]
 
-    def plan_single_line_trip(self, union_lines):
+    def plan_single_line_trip(self, union_lines: set[str]) -> dict:
+        """Plan a trip along one line."""
         trips = {}
         len_dict = defaultdict(list)
         for line in union_lines:

@@ -1,14 +1,15 @@
-from src.egresses import get_egresses
+from src.egresses import get_egresses, Egress
 
 
 class Station:
-    def __init__(self, egresses, lines):
+    def __init__(self, egresses: list[Egress], lines: list[str]):
         self.egresses = egresses
         self.lines = lines
         self.name = egresses[0].station
 
 
-def load_all_stations(egresses):
+def load_all_stations(egresse: list[Egress]) -> dict[str:Station]:
+    """Load all the stations given all egresses."""
     stations = dict()
     unique_station_names = set()
     for egress in egresses:
