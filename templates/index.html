@@ -62,9 +62,10 @@
             {% if trip_info.transfer %}
             {% if trip_info["first_leg"].egresses %}
             <p>
-                Your trip will require a transfer. First, you will travel on the <strong>{{
-                    '/'.join(trip_info["first_leg"]["lines"].keys())
-                    }}</strong> line(s) towards <strong>{{
+                Your trip will require a transfer. First, you will travel on the {% for code in
+                trip_info["first_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} line(s)
+                towards <strong>{{
                     '/'.join(trip_info["first_leg"]["lines"].values() | unique) }}</strong> for
                 <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
                 <br>
@@ -75,9 +76,10 @@
             </p>
             {% else %}
             <p>
-                Your trip will require a transfer. First, you will travel on the <strong>{{
-                    '/'.join(trip_info["first_leg"]["lines"].keys())
-                    }}</strong> line(s) towards <strong>{{
+                Your trip will require a transfer. First, you will travel on the {% for code in
+                trip_info["first_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} line(s)
+                towards <strong>{{
                     '/'.join(trip_info["first_leg"]["lines"].values() | unique) }}</strong> for
                 <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
                 <br>
@@ -89,7 +91,9 @@
             {% endif %}
             {% else %}
             <p>
-                You will take a journey on the <strong>{{ '/'.join(trip_info["first_leg"]["lines"].keys()) }}</strong>
+                You will take a journey on the {% for code in
+                trip_info["first_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %}
                 line(s) towards
                 <strong>{{
                     '/'.join(trip_info["first_leg"]["lines"].values() | unique) }}</strong> for
@@ -139,11 +143,12 @@
 
         <div class="result">
             <p>
-                For the second leg of your trip, you will travel on the <strong>{{
-                    '/'.join(trip_info["second_leg"]["lines"].keys())
-                    }}</strong> line(s) towards <strong>{{
-                    '/'.join(trip_info["second_leg"]["lines"].values() | unique) }}</strong> for
-                <strong>{{ trip_info["second_leg"]["num_stops"] }}</strong> stops.
+                For the second leg of your trip, you will travel on
+                {% for code in trip_info["second_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %}
+                line(s) towards
+                <strong>{{ '/'.join(trip_info["second_leg"]["lines"].values() | unique) }}</strong>
+                for <strong>{{ trip_info["second_leg"]["num_stops"] }}</strong> stops.
                 <br>
                 <br>Board the train at <strong>{{ trip_info["second_leg"]["start_station"] }}</strong> at the point(s)
                 listed below
