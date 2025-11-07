@@ -3,16 +3,25 @@
 import pandas as pd
 from collections import defaultdict
 import copy
+from src.stations import Station
+from src.lines import Line
 
 
 class TripPlanner:
-    def __init__(self, stations, lines, start_station, end_station):
+    def __init__(
+        self,
+        stations: dict[str:Station],
+        lines: dict[str:Line],
+        start_station: str,
+        end_station: str,
+    ):
         self.stations = stations
         self.lines = lines
         self.start_station = stations[start_station]
         self.end_station = stations[end_station]
 
-    def plan_trip(self):
+    def plan_trip(self) -> dict:
+        """Plan a trip."""
         start_lines = self.start_station.lines
         end_lines = self.end_station.lines
         union_lines = start_lines.intersection(end_lines)
