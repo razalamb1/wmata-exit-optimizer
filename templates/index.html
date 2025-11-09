@@ -8,47 +8,66 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 
 <body>
     <div class="container">
         <h1>WMATA Exit Optimizer</h1>
-        <p>Find the optimal train car and door for your destination</p>
+        <p>Enter your start and end station to find the optimal boarding position(s) for your
+            journey.</p>
 
-        <form method="POST">
-            <label for="start_station">Start Station</label>
-            <select id="start_station" name="start_station" required>
-                <option value="">Select a station</option>
-                {% for station in stations %}
-                <option value="{{ station }}" {% if trip_info and trip_info["start_station"]==station %}selected{% endif
-                    %}>
-                    {{ station }}
-                </option> {% endfor %}
-            </select>
+        <form method="POST" class="station-form">
+            <div class="station-group">
+                <label for="start_station" class="start-text">START STATION</label>
+                <select id="start_station" name="start_station" class="select-station" required>
+                    <option value="">Select a station</option>
+                    {% for station in stations %}
+                    <option value="{{ station }}" {% if trip_info and trip_info["start_station"]==station %}selected{%
+                        endif %}>
+                        {{ station }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label for="end_station">End Station</label>
-            <select id="end_station" name="end_station" required>
-                <option value="">Select a station</option>
-                {% for station in stations %}
-                <option value="{{ station }}" {% if trip_info and trip_info["end_station"]==station %}selected{% endif
-                    %}>
-                    {{ station }}
-                </option>
-                {% endfor %}
-            </select>
+            <div class="swap-container">
+                <button type="button" id="swap-btn" title="Swap start and end stations">
+                    <i class="fas fa-right-left"></i>
+                </button>
+            </div>
 
-            <button type="submit">Find Optimal Boarding</button>
+            <div class="station-group">
+                <label for="start_station" class="start-text">END STATION</label>
+                <select id="end_station" name="end_station" class="select-station" required>
+                    <option value="">Select a station</option>
+                    {% for station in stations %}
+                    <option value="{{ station }}" {% if trip_info and trip_info["end_station"]==station %}selected{%
+                        endif %}>
+                        {{ station }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Find Optimal Boarding</button>
         </form>
 
         {% if trip_info %}
+        {% set show_asterisk_note = namespace(value=false) %}
         <div class="result">
             {% if trip_info.transfer %}
             {% if trip_info["first_leg"].egresses %}
             <p>
-                Your trip will require a transfer. First, you will travel on the <strong>{{
-                    trip_info["first_leg"]["lines"]
-                    }}</strong> line(s) towards <strong>{{
-                    trip_info["first_leg"]["direction"] }}</strong> for
+                Your trip will require a transfer. First, you will travel on the {% for code in
+                trip_info["first_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} line(s)
+                towards {% for code, direction in
+                trip_info["first_leg"]["lines"].items() %}
+                <strong class="{{ code }}">{{ direction }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} for
                 <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
                 <br>
                 <br>Board the train at <strong>{{ trip_info["first_leg"]["start_station"] }}</strong> at the point(s)
@@ -58,10 +77,12 @@
             </p>
             {% else %}
             <p>
-                Your trip will require a transfer. First, you will travel on the <strong>{{
-                    trip_info["first_leg"]["lines"]
-                    }}</strong> line(s) towards <strong>{{
-                    trip_info["first_leg"]["direction"] }}</strong> for
+                Your trip will require a transfer. First, you will travel on the {% for code in
+                trip_info["first_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} line(s)
+                towards {% for code, direction in
+                trip_info["first_leg"]["lines"].items() %}
+                <strong class="{{ code }}">{{ direction }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} for
                 <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
                 <br>
                 <br>Your transfer will be on the same platform, so you can board the train at <strong>{{
@@ -72,9 +93,13 @@
             {% endif %}
             {% else %}
             <p>
-                You will take a journey on the <strong>{{ trip_info["first_leg"]["lines"] }}</strong> line(s) towards
-                <strong>{{
-                    trip_info["first_leg"]["direction"] }}</strong> for
+                You will take a journey on the {% for code in
+                trip_info["first_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %}
+                line(s) towards
+                {% for code, direction in
+                trip_info["first_leg"]["lines"].items() %}
+                <strong class="{{ code }}">{{ direction }} </strong>{% if not loop.last %}/{% endif %}{% endfor %} for
                 <strong>{{ trip_info["first_leg"]["num_stops"] }}</strong> stops.
                 <br>
                 <br>Board the train at <strong>{{ trip_info["first_leg"]["start_station"] }}</strong> at the points
@@ -101,7 +126,15 @@
                         {% else %}
                         <i class="fas fa-question-circle" title="Unknown"></i>
                         {% endif %}
-                        <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                        <span>
+                            Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong>
+                            {% if entry[1] > 6 %}
+                            *{% set show_asterisk_note.value = true %}
+                            {% endif %}
+                        </span>
+                        {% if entry[3] %}
+                        <span class="preferred-tag">Preferred</span>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
@@ -113,10 +146,14 @@
 
         <div class="result">
             <p>
-                For the second leg of your trip, you will travel on the <strong>{{ trip_info["second_leg"]["lines"]
-                    }}</strong> line(s) towards <strong>{{
-                    trip_info["second_leg"]["direction"] }}</strong> for
-                <strong>{{ trip_info["second_leg"]["num_stops"] }}</strong> stops.
+                For the second leg of your trip, you will travel on
+                {% for code in trip_info["second_leg"]["lines"].keys() %}
+                <strong class="{{ code }}">{{ code }} </strong>{% if not loop.last %}/{% endif %}{% endfor %}
+                line(s) towards
+                {% for code, direction in
+                trip_info["second_leg"]["lines"].items() %}
+                <strong class="{{ code }}">{{ direction }} </strong>{% if not loop.last %}/{% endif %}{% endfor %}
+                for <strong>{{ trip_info["second_leg"]["num_stops"] }}</strong> stops.
                 <br>
                 <br>Board the train at <strong>{{ trip_info["second_leg"]["start_station"] }}</strong> at the point(s)
                 listed below
@@ -141,7 +178,15 @@
                         {% else %}
                         <i class="fas fa-question-circle" title="Unknown"></i>
                         {% endif %}
-                        <span>Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong></span>
+                        <span>
+                            Car <strong>{{ entry[1] }}</strong>, Door <strong>{{ entry[2] }}</strong>
+                            {% if entry[1] > 6 %}
+                            *{% set show_asterisk_note.value = true %}
+                            {% endif %}
+                        </span>
+                        {% if entry[3] %}
+                        <span class="preferred-tag">Preferred</span>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
@@ -150,8 +195,38 @@
             {% endif %}
 
         </div>
+        {% if show_asterisk_note.value %}
+        <p class="note">
+            *Some Metro trains may only run 6 cars (instead of the full platform length of 8).
+            If this is case, board at <strong>Car 6, Door 3</strong>.
+        </p>
+        {% endif %}
+
         {% endif %}
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.select-station').select2({
+                width: '100%',
+                placeholder: "Select a station",
+                allowClear: true
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById('swap-btn').addEventListener('click', function () {
+            const start = document.getElementById('start_station');
+            const end = document.getElementById('end_station');
+            const temp = start.value;
+            start.value = end.value;
+            end.value = temp;
+            // Trigger change event if using Select2 or similar
+            start.dispatchEvent(new Event('change'));
+            end.dispatchEvent(new Event('change'));
+        });
+    </script>
 
 </body>
 

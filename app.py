@@ -15,6 +15,7 @@ def index():
         end = request.form.get("end_station")
         tp = TripPlanner(stations, lines, start, end)
         result = tp.plan_trip()
+        # Add station to return object
         result["start_station"] = start
         result["end_station"] = end
     return render_template(

@@ -15,6 +15,30 @@ body {
     text-align: center;
 }
 
+.YL {
+    color: gold;
+}
+
+.GR {
+    color: green;
+}
+
+.RD {
+    color: red;
+}
+
+.BL {
+    color: blue;
+}
+
+.SV {
+    color: silver;
+}
+
+.OR {
+    color: orange;
+}
+
 h1 {
     color: #1c1e21;
 }
@@ -65,6 +89,13 @@ button:hover {
     padding-bottom: 5px;
 }
 
+.start-text {
+    margin-bottom: 10px;
+    color: #2d4373;
+    font-weight: bold;
+
+}
+
 .egress-list {
     list-style: none;
     padding: 0;
@@ -96,4 +127,107 @@ button:hover {
     width: 20px;
     height: 20px;
     vertical-align: middle;
+}
+
+.egress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preferred-tag {
+    background-color: #ffcc00;
+    color: #222;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.85em;
+}
+
+.note {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 15px;
+    text-align: left;
+    font-style: italic;
+}
+
+.select2-container {
+    text-align: left;
+    font-size: 16px;
+}
+
+.station-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    /* max-width: 400px; */
+    margin: 0 auto;
+}
+
+.station-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    text-align: left;
+}
+
+.select-station {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.swap-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#swap-btn {
+    background-color: #3367d6;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+    /* transform: rotate(90deg); */
+    margin: 0.25rem 0;
+    margin-bottom: -5px;
+
+}
+
+#swap-btn:hover {
+    background-color: #2554b4;
+}
+
+.submit-btn {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    background-color: #2f3f9e;
 }
