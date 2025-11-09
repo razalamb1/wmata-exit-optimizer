@@ -58,7 +58,9 @@ class TripPlanner:
         possible_trips = possible_trips[min(possible_trips)]
         trip = self.combine_trips(possible_trips)
         if not trip[0]["egresses"]:
-            if not self.check_directions(trip[0]["direction"], trip[1]["direction"]):
+            if not self.check_directions(
+                list(trip[0]["lines"].values())[0], list(trip[1]["lines"].values())[0]
+            ):
                 new_egresses = dict()
                 for label, egresses in trip[1]["egresses"].items():
                     new_egresses[label] = []
@@ -113,8 +115,13 @@ class TripPlanner:
             second_lines.update(trip[1]["lines"])
         first_leg = trips[0][0]
         second_leg = trips[0][1]
+        if (len(first_lines) > 1) and ("RD" in first_lines.keys()):
+            first_lines.pop("RD")
+        if (len(second_lines) > 1) and ("RD" in second_lines.keys()):
+            second_lines.pop("RD")
         first_leg["lines"] = first_lines
         second_leg["lines"] = second_lines
+
         return [first_leg, second_leg]
 
     def plan_single_line_trip(self, union_lines: set[str]) -> dict:

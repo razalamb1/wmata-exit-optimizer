@@ -278,13 +278,13 @@ NoMa-Gallaudet U,stair,1,40,nw,d,,,,1,,,
 NoMa-Gallaudet U,stair,1,54,nw,d,TRUE,,2,1,,,
 North Bethesda,el,3,71,,,,,,,,,
 North Bethesda,esc,1,71,ne,u,,,,,,,
-Pentagon,el,2,2,,,,,1,,,,
-Pentagon,esc,2,22,ne,d,,,2,1,,,
+Pentagon,el,2,2,,,,,1,,TRUE,"[BL, YL]","[Franconia-Springfield, Huntington]"
+Pentagon,esc,2,22,ne,d,,,2,1,TRUE,"[BL, YL]","[Franconia-Springfield, Huntington]"
 Pentagon,exit,2,24,s,,,31,,1,,,
-Pentagon,esc,2,33,nw,d,,,,1,,,
-Pentagon,el,1,2,,,,,,,,,
-Pentagon,esc,1,8,ne,u,,,,,,,
-Pentagon,esc,1,46,nw,u,,,,,,,
+Pentagon,esc,2,33,nw,d,,,,1,TRUE,"[BL, YL]","[Franconia-Springfield, Huntington]"
+Pentagon,el,1,2,,,,,,,TRUE,"[BL, YL]","[Downtown Largo, Mount Vernon Square]"
+Pentagon,esc,1,8,ne,u,,,,,TRUE,"[BL, YL]","[Downtown Largo, Mount Vernon Square]"
+Pentagon,esc,1,46,nw,u,,,,,TRUE,"[BL, YL]","[Downtown Largo, Mount Vernon Square]"
 Pentagon City,el,2,5,,,,,,,,,
 Pentagon City,esc,2,27,nw,u,,,,,,,
 Pentagon City,el,1,5,,,,,,,,,
@@ -305,14 +305,14 @@ Rhode Island Avenue,el,1,35,,,,,,,,,
 Rhode Island Avenue,esc,3,36,ne,d,,,,,,,
 Rockville,el,2,28,,,,,,,,,
 Rockville,esc,2,40,ne,d,,,,,,,
-Rosslyn,esc,2,17,ne,u,,,,,,,
-Rosslyn,el,2,36,,,,,,,,,
-Rosslyn,esc,2,54,nw,u,,,,,,,
-Rosslyn,esc,1,31,ne,d,,,,1,,,
+Rosslyn,esc,2,17,ne,u,,,,,TRUE,"[BL, OR, SV]","[Downtown Largo, New Carrollton]"
+Rosslyn,el,2,36,,,,,,,TRUE,"[BL, OR, SV]","[Downtown Largo, New Carrollton]"
+Rosslyn,esc,2,54,nw,u,,,,,TRUE,"[BL, OR, SV]","[Downtown Largo, New Carrollton]"
+Rosslyn,esc,1,31,ne,d,,,,1,TRUE,"[BL, OR, SV]","[Ashburn, Franconia-Springfield, Vienna]"
 Rosslyn,exit,1,36,n,,,37,,1,,,
-Rosslyn,el,1,38,n,,,,,1,,,
+Rosslyn,el,1,38,n,,,,,1,TRUE,"[BL, OR, SV]","[Ashburn, Franconia-Springfield, Vienna]"
 Rosslyn,exit,1,38,n,,,39,,1,,,
-Rosslyn,esc,1,41,nw,d,,,,1,,,
+Rosslyn,esc,1,41,nw,d,,,,1,TRUE,"[BL, OR, SV]","[Ashburn, Franconia-Springfield, Vienna]"
 Shady Grove,stair,2,18,nw,d,,,,,,,
 Shady Grove,el,2,28,,,,,,,,,
 Shady Grove,stair,3,37,ne,d,,,,,,,
