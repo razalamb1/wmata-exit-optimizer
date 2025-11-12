@@ -7,6 +7,8 @@ import re
 
 LINES = ["RD", "GR", "YL", "BL", "SV", "OR"]
 
+label_stations = set()
+
 
 def get_lines_at_station(station_name: str) -> list[str]:
     """Find all the lines that exist at a given station."""
@@ -136,8 +138,10 @@ def get_one_egress(row: pd.Series) -> Egress:
         (exits["nameStd"] == station) & (exits["exitLabel"] == row["exitLabel"]),
         "description",
     ]
+
     if len(label) > 0:
         label = label.item()
+        label_stations.add(station)
     else:
         label = "Main Exit"
     lines = get_lines_at_station(station)
@@ -168,6 +172,3 @@ def get_one_egress(row: pd.Series) -> Egress:
 
 if __name__ == "__main__":
     result = get_egresses()
-    for rez in result:
-        if "Metro" in rez.station:
-            print(rez.__dict__)
