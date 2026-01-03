@@ -164,6 +164,15 @@ def define_all_lines(stations: dict) -> dict[str:Line]:
         "Branch Avenue",
     ]
     yellow_stations = [
+        "Greenbelt",
+        "College Park-U of Md",
+        "Hyattsville Crossing",
+        "West Hyattsville",
+        "Fort Totten",
+        "Georgia Avenue-Petworth",
+        "Columbia Heights",
+        "U Street",
+        "Shaw-Howard U",
         "Mount Vernon Square",
         "Gallery Place",
         "Archives",
