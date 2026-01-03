@@ -252,6 +252,7 @@ def define_all_lines(stations: dict) -> dict[str:Line]:
         "Capitol Heights",
         "Addison Road",
         "Morgan Boulevard",
+        "New Carrollton",
         "Downtown Largo",
     ]
     orange_stations = [
