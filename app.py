@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 from src.plan_trip import TripPlanner
-from src.load_data import egresses, stations, lines
+from src.load_data import egresses, stations, lines, name_matching
+from src.load_data import key
+import requests
 
 
 app = Flask(__name__)
@@ -13,7 +15,7 @@ def index():
     if request.method == "POST":
         start = request.form.get("start_station")
         end = request.form.get("end_station")
-        tp = TripPlanner(stations, lines, start, end)
+        tp = TripPlanner(stations, lines, name_matching, start, end)
         result = tp.plan_trip()
         # Add station to return object
         result["start_station"] = start
