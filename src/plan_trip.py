@@ -70,7 +70,12 @@ class TripPlanner:
     def plan_two_line_trip(self, start_lines, end_lines):
         possible_trips = defaultdict(list)
         transfer_plans = self.get_transfer_plans(start_lines, end_lines)
-        for t_plan in transfer_plans:
+        for i, t_plan in enumerate(transfer_plans):
+            print("--------------------------------------")
+            print(f"TRANSFER PLAN {i}")
+            print(f"Start Line: {t_plan["start_line"]}")
+            print(f"End Line: {t_plan["end_line"]}")
+            print(f"Transfer Station: {t_plan["transfer_station"].name}")
             second_leg = self.lines[t_plan["end_line"]].plan_trip(
                 t_plan["transfer_station"], self.end_station
             )
@@ -81,10 +86,13 @@ class TripPlanner:
                 transfer_line=t_plan["end_line"],
                 transfer_direction=list(second_leg["lines"].values())[0],
             )
+            print(f"Num Stops: {second_leg["num_stops"] + first_leg["num_stops"]}")
             possible_trips[second_leg["num_stops"] + first_leg["num_stops"]].append(
                 (first_leg, second_leg)
             )
         possible_trips = possible_trips[min(possible_trips)]
+        for possible_trip in possible_trips:
+            print(possible_trip)
         trip = self.combine_trips(possible_trips)
         if not trip[0]["egresses"]:
             if not self.check_directions(
@@ -182,29 +190,34 @@ class TripPlanner:
     def get_train_arrivals(
         self, start_station: str, end_station: str, lines_used: list
     ):
-        station_code = self.name_matching[(start_station, lines_used[0])]
-        url = f"https://api.wmata.com/StationPrediction.svc/json/GetPrediction/{station_code}"
-        sesh = requests.Session()
-        headers = {"api_key": key}
-        req = sesh.get(url, headers=headers)
-        train_data = req.json()["Trains"]
-        trains_return = []
-        for train in train_data:
-            if train["Line"] in lines_used:
-                tmp_line = self.lines[train["Line"]]
-                if train["DestinationCode"]:
-                    dest = self.name_matching_r[train["DestinationCode"]][0]
-                else:
-                    dest = closest_string(train["Destination"], tmp_line.station_names)
-                if tmp_line.is_between(start_station, dest, end_station):
-                    if train["Min"] in ["BRD", "ARR"]:
-                        train["Min"] = 0
-                    trains_return.append(
-                        {
-                            "color": train["Line"],
-                            "minutes": train["Min"],
-                            "cars": train["Car"],
-                            "destination": train["Destination"],
-                        }
-                    )
+        try:
+            station_code = self.name_matching[(start_station, lines_used[0])]
+            url = f"https://api.wmata.com/StationPrediction.svc/json/GetPrediction/{station_code}"
+            sesh = requests.Session()
+            headers = {"api_key": key}
+            req = sesh.get(url, headers=headers)
+            train_data = req.json()["Trains"]
+            trains_return = []
+            for train in train_data:
+                if train["Line"] in lines_used:
+                    tmp_line = self.lines[train["Line"]]
+                    if train["DestinationCode"]:
+                        dest = self.name_matching_r[train["DestinationCode"]][0]
+                    else:
+                        dest = closest_string(
+                            train["Destination"], tmp_line.station_names
+                        )
+                    if tmp_line.is_between(start_station, dest, end_station):
+                        if train["Min"] in ["BRD", "ARR"]:
+                            train["Min"] = 0
+                        trains_return.append(
+                            {
+                                "color": train["Line"],
+                                "minutes": train["Min"],
+                                "cars": train["Car"],
+                                "destination": train["Destination"],
+                            }
+                        )
+        except:
+            trains_return = []
         return trains_return
