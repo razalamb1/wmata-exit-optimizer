@@ -75,6 +75,18 @@
                 for
                 optimized transfer at <strong>{{ trip_info["first_leg"]["end_station"] }}</strong>.
             </p>
+            {% if trip_info["first_leg_arrivals"] %}
+            <p class="train-arrivals-inline">
+                <strong>Next trains at {{ trip_info["first_leg"]["start_station"] }}:</strong>
+                {% for train in trip_info["first_leg_arrivals"] %}
+                <span class="arrival">
+                    <strong class="{{ train.color }}">{{ train.minutes }}m</strong>
+                    <span class="cars">({{ train.cars }})</span>
+                </span>
+                {% if not loop.last %}·{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
             {% else %}
             <p>
                 Your trip will require a transfer. First, you will travel on the {% for code in
@@ -90,6 +102,18 @@
                 listed below and then re-board the same location when you transfer at <strong>{{
                     trip_info["first_leg"]["end_station"] }}</strong>.
             </p>
+            {% if trip_info["first_leg_arrivals"] %}
+            <p class="train-arrivals-inline">
+                <strong>Next trains at {{ trip_info["first_leg"]["start_station"] }}:</strong>
+                {% for train in trip_info["first_leg_arrivals"] %}
+                <span class="arrival">
+                    <strong class="{{ train.color }}">{{ train.minutes }}m</strong>
+                    <span class="cars">({{ train.cars }})</span>
+                </span>
+                {% if not loop.last %}·{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
             {% endif %}
             {% else %}
             <p>
@@ -107,6 +131,18 @@
                 optimized
                 exit at <strong>{{ trip_info["first_leg"]["end_station"] }}</strong>.
             </p>
+            {% if trip_info["first_leg_arrivals"] %}
+            <p class="train-arrivals-inline">
+                <strong>Next trains at {{ trip_info["first_leg"]["start_station"] }}:</strong>
+                {% for train in trip_info["first_leg_arrivals"] %}
+                <span class="arrival">
+                    <strong class="{{ train.color }}">{{ train.minutes }}m</strong>
+                    <span class="cars">({{ train.cars }})</span>
+                </span>
+                {% if not loop.last %}·{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
             {% endif %}
 
             {% for name, entries in trip_info["first_leg"].egresses.items() %}
@@ -160,6 +196,18 @@
                 for
                 optimized exit at <strong>{{ trip_info["second_leg"]["end_station"] }}</strong>.
             </p>
+            {% if trip_info["second_leg_arrivals"] %}
+            <p class="train-arrivals-inline">
+                <strong>Next trains at {{ trip_info["second_leg"]["start_station"] }}:</strong>
+                {% for train in trip_info["second_leg_arrivals"] %}
+                <span class="arrival">
+                    <strong class="{{ train.color }}">{{ train.minutes }}m</strong>
+                    <span class="cars">({{ train.cars }})</span>
+                </span>
+                {% if not loop.last %}·{% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
 
             {% for name, entries in trip_info["second_leg"].egresses.items() %}
             <div class="egress-group">

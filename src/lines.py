@@ -103,6 +103,12 @@ class Line:
         else:
             return "westbound", num_stations
 
+    def is_between(self, start_station, end_station, target_station):
+        i_start = self.station_names.index(start_station)
+        i_end = self.station_names.index(end_station)
+        i_dest = self.station_names.index(target_station)
+        return min(i_start, i_end) <= i_dest <= max(i_start, i_end)
+
 
 def define_all_lines(stations: dict) -> dict[str:Line]:
     red_stations = [
@@ -158,6 +164,15 @@ def define_all_lines(stations: dict) -> dict[str:Line]:
         "Branch Avenue",
     ]
     yellow_stations = [
+        "Greenbelt",
+        "College Park-U of Md",
+        "Hyattsville Crossing",
+        "West Hyattsville",
+        "Fort Totten",
+        "Georgia Avenue-Petworth",
+        "Columbia Heights",
+        "U Street",
+        "Shaw-Howard U",
         "Mount Vernon Square",
         "Gallery Place",
         "Archives",
@@ -237,6 +252,7 @@ def define_all_lines(stations: dict) -> dict[str:Line]:
         "Capitol Heights",
         "Addison Road",
         "Morgan Boulevard",
+        "New Carrollton",
         "Downtown Largo",
     ]
     orange_stations = [

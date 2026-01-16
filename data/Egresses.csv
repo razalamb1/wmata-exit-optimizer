@@ -115,9 +115,9 @@ Forest Glen,exit,1,52,n,,,54,,,,,
 Fort Totten (Lower Level),el,1,2,,,,,,,TRUE,[RD],both
 Fort Totten (Lower Level),stair,2,9,nw,u,TRUE,,,,TRUE,[RD],both
 Fort Totten (Lower Level),esc,2,15,nw,u,,,,,TRUE,[RD],both
-Fort Totten (Upper Level),esc,2,26,nw,d,,,,,TRUE,[GR],both
-Fort Totten (Upper Level),el,2,37,,,,,,,TRUE,[GR],both
-Fort Totten (Upper Level),esc,2,47,ne,d,,,,,TRUE,[GR],both
+Fort Totten (Upper Level),esc,2,26,nw,d,,,,,TRUE,"[GR, YL]",both
+Fort Totten (Upper Level),el,2,37,,,,,,,TRUE,"[GR, YL]",both
+Fort Totten (Upper Level),esc,2,47,ne,d,,,,,TRUE,"[GR, YL]",both
 Franconia-Springfield,el,2,19,,,,,,,,,
 Franconia-Springfield,esc,2,31,nw,u,TRUE,,,,,,
 Franconia-Springfield,stair,1,38,nw,u,,,,,,,

@@ -2,9 +2,16 @@
 
 import pandas as pd
 from collections import defaultdict
-import copy
 from src.stations import Station
 from src.lines import Line
+from src.load_data import key
+import requests
+from rapidfuzz import process, fuzz
+
+
+def closest_string(target, candidates):
+    match, score, _ = process.extractOne(target, candidates, scorer=fuzz.ratio)
+    return match
 
 
 class TripPlanner:
@@ -12,11 +19,15 @@ class TripPlanner:
         self,
         stations: dict[str:Station],
         lines: dict[str:Line],
+        name_matching: dict[tuple[str], str],
         start_station: str,
         end_station: str,
     ):
         self.stations = stations
         self.lines = lines
+        self.name_matching = name_matching
+        self.name_matching_r = {v: k for k, v in name_matching.items()}
+
         self.start_station = stations[start_station]
         self.end_station = stations[end_station]
 
@@ -30,18 +41,36 @@ class TripPlanner:
             trip = self.plan_single_line_trip(union_lines)
             trip_info["first_leg"] = trip
             trip_info["transfer"] = False
+            train_arrivals = self.get_train_arrivals(
+                trip["start_station"],
+                trip["end_station"],
+                list(trip["lines"].keys()),
+            )
+            trip_info["first_leg_arrivals"] = train_arrivals
             return trip_info
         else:
             trip = self.plan_two_line_trip(start_lines, end_lines)
             trip_info["first_leg"] = trip[0]
             trip_info["second_leg"] = trip[1]
             trip_info["transfer"] = True
+            first_train_arrivals = self.get_train_arrivals(
+                trip[0]["start_station"],
+                trip[0]["end_station"],
+                list(trip[0]["lines"].keys()),
+            )
+            second_train_arrivals = self.get_train_arrivals(
+                trip[1]["start_station"],
+                trip[1]["end_station"],
+                list(trip[1]["lines"].keys()),
+            )
+            trip_info["first_leg_arrivals"] = first_train_arrivals
+            trip_info["second_leg_arrivals"] = second_train_arrivals
             return trip_info
 
     def plan_two_line_trip(self, start_lines, end_lines):
         possible_trips = defaultdict(list)
         transfer_plans = self.get_transfer_plans(start_lines, end_lines)
-        for t_plan in transfer_plans:
+        for i, t_plan in enumerate(transfer_plans):
             second_leg = self.lines[t_plan["end_line"]].plan_trip(
                 t_plan["transfer_station"], self.end_station
             )
@@ -149,3 +178,38 @@ class TripPlanner:
             for trip in trips[len_dict[smallest_dist]]:
                 trip_line_dict.update(trip["lines"])
             return main_trip
+
+    def get_train_arrivals(
+        self, start_station: str, end_station: str, lines_used: list
+    ):
+        try:
+            station_code = self.name_matching[(start_station, lines_used[0])]
+            url = f"https://api.wmata.com/StationPrediction.svc/json/GetPrediction/{station_code}"
+            sesh = requests.Session()
+            headers = {"api_key": key}
+            req = sesh.get(url, headers=headers)
+            train_data = req.json()["Trains"]
+            trains_return = []
+            for train in train_data:
+                if train["Line"] in lines_used:
+                    tmp_line = self.lines[train["Line"]]
+                    if train["DestinationCode"]:
+                        dest = self.name_matching_r[train["DestinationCode"]][0]
+                    else:
+                        dest = closest_string(
+                            train["Destination"], tmp_line.station_names
+                        )
+                    if tmp_line.is_between(start_station, dest, end_station):
+                        if train["Min"] in ["BRD", "ARR"]:
+                            train["Min"] = 0
+                        trains_return.append(
+                            {
+                                "color": train["Line"],
+                                "minutes": train["Min"],
+                                "cars": train["Car"],
+                                "destination": train["Destination"],
+                            }
+                        )
+        except:
+            trains_return = []
+        return trains_return
