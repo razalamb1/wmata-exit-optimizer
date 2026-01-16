@@ -71,11 +71,6 @@ class TripPlanner:
         possible_trips = defaultdict(list)
         transfer_plans = self.get_transfer_plans(start_lines, end_lines)
         for i, t_plan in enumerate(transfer_plans):
-            print("--------------------------------------")
-            print(f"TRANSFER PLAN {i}")
-            print(f"Start Line: {t_plan["start_line"]}")
-            print(f"End Line: {t_plan["end_line"]}")
-            print(f"Transfer Station: {t_plan["transfer_station"].name}")
             second_leg = self.lines[t_plan["end_line"]].plan_trip(
                 t_plan["transfer_station"], self.end_station
             )
@@ -86,13 +81,10 @@ class TripPlanner:
                 transfer_line=t_plan["end_line"],
                 transfer_direction=list(second_leg["lines"].values())[0],
             )
-            print(f"Num Stops: {second_leg["num_stops"] + first_leg["num_stops"]}")
             possible_trips[second_leg["num_stops"] + first_leg["num_stops"]].append(
                 (first_leg, second_leg)
             )
         possible_trips = possible_trips[min(possible_trips)]
-        for possible_trip in possible_trips:
-            print(possible_trip)
         trip = self.combine_trips(possible_trips)
         if not trip[0]["egresses"]:
             if not self.check_directions(
