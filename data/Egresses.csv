@@ -139,11 +139,11 @@ Gallery Place (Lower Level),el,1,58,,,,,5,2,,,
 Gallery Place (Lower Level),stair,1,67,nw,u,,,5,2,,,
 Gallery Place (Lower Level),esc,3,67,nw,u,,,5,2,,,
 Gallery Place (Upper Level),esc,2,21,nw,u,,,1,,,,
-Gallery Place (Upper Level),exit,2,65,n,,,67,2,1,TRUE,[GR],both
-Gallery Place (Upper Level),exit,2,69,n,,,70,2,1,TRUE,[GR],both
+Gallery Place (Upper Level),exit,2,65,n,,,67,2,1,TRUE,"[GR, YL]",both
+Gallery Place (Upper Level),exit,2,69,n,,,70,2,1,TRUE,"[GR, YL]",both
 Gallery Place (Upper Level),esc,1,21,nw,u,,,1,,,,
-Gallery Place (Upper Level),exit,1,65,s,,,67,3,2,TRUE,[GR],both
-Gallery Place (Upper Level),exit,1,69,s,,,70,3,2,TRUE,[GR],both
+Gallery Place (Upper Level),exit,1,65,s,,,67,3,2,TRUE,"[GR, YL]",both
+Gallery Place (Upper Level),exit,1,69,s,,,70,3,2,TRUE,"[GR, YL]",both
 Georgia Avenue-Petworth,esc,2,51,ne,u,,,,,,,
 Georgia Avenue-Petworth,stair,2,59,ne,u,TRUE,,,,,,
 Georgia Avenue-Petworth,el,2,65,,,,,,,,,
